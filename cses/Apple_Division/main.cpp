@@ -3,22 +3,22 @@
 using namespace std;
 #include <iostream>
 
-void subset(int k);
+void subset(long k);
 
-int n;
-vector<int> apples;
-vector<int> currentSearch;
-int currentMinimum;
+long n;
+vector<long> apples;
+vector<long> currentSearch;
+long currentMinimum;
 
-int sumOfApples;
+long sumOfApples;
 
 
 int main() {
-    currentMinimum = INT_MAX;
+    currentMinimum = LONG_MAX;
 
     cin >> n;
     apples.resize(n);
-    for (int i = 0; i < n; i++) {
+    for (long i = 0; i < n; i++) {
         cin >> apples.at(i);
         sumOfApples += apples.at(i);
     }
@@ -30,13 +30,13 @@ int main() {
 }
 
 
-void subset(int k) {
+void subset(long k) {
     if (k == n) {
-        int sum = 0;
-        for (int i : currentSearch) {
+        long sum = 0;
+        for (long i : currentSearch) {
             sum += apples[i];
         }
-        int sum2 = sumOfApples - sum;
+        long sum2 = sumOfApples - sum;
         if (abs(sum - sum2) < currentMinimum) {
             currentMinimum = abs(sum - sum2);
         }

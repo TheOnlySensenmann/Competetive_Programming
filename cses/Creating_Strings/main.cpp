@@ -8,13 +8,13 @@ string characters;
 
 set<string> permutations;
 
-void goLayer(bool usedIndexes[], string currentCharacters, int usedCharacters);
+void goLayer(vector<bool> usedIndexes, string currentCharacters, size_t usedCharacters);
 
 int main() {
     cin >> characters;
 
 
-    bool usedIndexes[characters.size()];
+    vector<bool> usedIndexes(characters.size(), false);
 
     string currentCharacters = characters;
 
@@ -24,18 +24,20 @@ int main() {
     for (const auto& permutation : permutations) {
         cout << permutation << endl;
     }
+
+    return 0;
 }
 
 
-void goLayer(bool usedIndexes[], string currentCharacters, int usedCharacters) {
+void goLayer(vector<bool> usedIndexes, string currentCharacters, size_t usedCharacters) {
     if (usedCharacters == characters.size()) {
         permutations.insert(currentCharacters);
         return;
     }
-    for (int i = 0; i < characters.length(); i++) {
+    for (size_t i = 0; i < characters.length(); i++) {
         if (!usedIndexes[i]) {
             usedIndexes[i] = true;
-            currentCharacters[usedCharacters + 1] = characters[i];
+            currentCharacters[usedCharacters] = characters[i];
             goLayer(usedIndexes, currentCharacters, usedCharacters + 1);
             usedIndexes[i] = false;
         }

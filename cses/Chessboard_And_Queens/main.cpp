@@ -3,24 +3,26 @@
 #include <iostream>
 #include <vector>
 
-const int size = 8;
+using namespace std;
+
+const int SIZE = 8;
 
 
-bool checkIfNotAttacked(char matrix[size][size], int i, int depth);
+bool checkIfNotAttacked(vector<string> matrix, int i, int depth);
 
-void place(char matrix[size][size], int depth);
+void place(vector<string> matrix, int depth);
 
-std::string arrToString(char matrix[size][size]);
+std::string arrToString(vector<string> matrix);
 
 int result = 0;
 
 int main() {
-    char matrix[size][size];
+    vector<string> matrix;
 
-    for (auto & i : matrix) {
-        std::string line;
-        std::cin >> line;
-        strcpy(i, line.c_str());
+    for (int i = 0; i < SIZE; i++) {
+        string line;
+        cin >> line;
+        matrix.push_back(line);
     }
 
     place(matrix, 0);
@@ -30,8 +32,8 @@ int main() {
 }
 
 
-bool checkIfNotAttacked(char matrix[size][size], int i, int depth) {
-    for (int j = 0; j < size; j++) {
+bool checkIfNotAttacked(vector<string> matrix, int i, int depth) {
+    for (int j = 0; j < SIZE; j++) {
         if (j == depth) {
             continue;
         }
@@ -48,7 +50,7 @@ bool checkIfNotAttacked(char matrix[size][size], int i, int depth) {
         }
         int x = i - minus + j;
         int y = depth - minus + j;
-        if (y < 0 || x < 0 || y >= size || x >= size) {
+        if (y < 0 || x < 0 || y >= SIZE || x >= SIZE) {
             break;
         }
         if (matrix[y][x] == 'q') {
@@ -65,7 +67,7 @@ bool checkIfNotAttacked(char matrix[size][size], int i, int depth) {
         int x = i + minus - j;
         int y = depth - minus + j;
 
-        if (y < 0 || x < 0 || y >= size || x >= size) {
+        if (y < 0 || x < 0 || y >= SIZE || x >= SIZE) {
             break;
         }
         if (matrix[y][x] == 'q') {
@@ -77,16 +79,13 @@ bool checkIfNotAttacked(char matrix[size][size], int i, int depth) {
     return true;
 }
 
-void place(char matrix[size][size], int depth) {
-    if (depth == size) {
+void place(vector<string> matrix, int depth) {
+
+    if (depth == SIZE) {
         result++;
-        // std::ofstream file("../log.txt", std::ios::app);
-        // file << arrToString(matrix);
-        // file << std::endl;
-        // file.close();
-        // return;
+        return;
     }
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < SIZE; i++) {
         if (matrix[depth][i] == '*') {
             continue;
         }
@@ -96,15 +95,4 @@ void place(char matrix[size][size], int depth) {
         }
         matrix[depth][i] = '.';
     }
-}
-
-std::string arrToString(char matrix[size][size]) {
-    std::string result;
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            result += matrix[i][j];
-        }
-        result += '\n';
-    }
-    return result;
 }

@@ -39,19 +39,15 @@ vector<string> parseInput(const string& input) {
 }
 
 vector<vector<std::string> > groupAnagrams(vector<string> &strs) {
-    map<string, vector<int> > map;
+    map<string, vector<string> > map;
     vector<vector<string> > res;
-    for (int i = 0; i < strs.size(); i++) {
-        string word = strs[i];
+    for (const auto & str : strs) {
+        string word = str;
         sort(word.begin(), word.end());
-        map[word].push_back(i);
+        map[word].push_back(str);
     }
     for (auto key : map) {
-        vector<string> res_part;
-        for (auto item : key.second) {
-            res_part.push_back(strs.at(item));
-        }
-        res.push_back(res_part);
+        res.push_back(key.second);
     }
     return res;
 }

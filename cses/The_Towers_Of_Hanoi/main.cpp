@@ -1,14 +1,14 @@
 #include <climits>
 #include <iostream>
+#include <stack>
 #include <vector>
+#include <array>
 using namespace std;
 
-vector<vector<int>> stacks;
-int k = 32;
-vector<string> bestMoves;
-vector<string> currentMoves;
+vector<stack<int>> stacks;
+vector<array<int,2>> bestMoves;
 
-void move (int depth, int n);
+void move (int depth, int from, int to);
 
 int main() {
     int n;
@@ -19,49 +19,34 @@ int main() {
     stacks.emplace_back();
 
     for(int i=n;i>0;i--) {
-        stacks[0].push_back(i);
+        stacks[0].push(i);
     }
 
-    move (0, n);
+    move (n, 0,2);
 
-    cout << k << endl;
+    cout << bestMoves.size() << endl;
 
-    for(int i=0;i<bestMoves.size();i++) {
-        cout << bestMoves[i] << endl;
+    for(auto & bestMove : bestMoves) {
+        cout << std::to_string(bestMove[0]) + " " + to_string(bestMove[1]) << endl;
     }
 
 }
 
 
-void move(int depth, int n) {
-    if (depth >= k) {
+void move(const int depth, const int from, const int to) {
+    if (depth == 0) {
         return;
     }
-    if (stacks[2].size() == n) {
-        k = depth;
-        bestMoves = currentMoves;
-        return;
-    }
-    for (int moveFrom=0;moveFrom<3;moveFrom++) {
-        for (int moveTo=2;moveTo>=0;moveTo--) {
-            if (moveFrom == moveTo) {
-                continue;
-            }
-            if (stacks[moveFrom].empty()) {
-                continue;
-            }
-            if (!stacks[moveTo].empty() && stacks[moveFrom].back() > stacks[moveTo].back()) {
-                continue;
-            }
-            stacks[moveTo].push_back(stacks[moveFrom].back());
-            stacks[moveFrom].pop_back();
-            currentMoves.push_back(std::to_string(moveFrom + 1) + " " + to_string(moveTo + 1));
-            move(depth+1,n);
-            currentMoves.pop_back();
-            stacks[moveFrom].push_back(stacks[moveTo].back());
-            stacks[moveTo].pop_back();
+    int free = -1;
+    for (int i = 0; i<=2; i++) {
+        if (i != from && i != to) {
+            free = i;
         }
     }
 
-
+    move(depth - 1, from, free);
+    stacks[to].push(stacks[from].top());
+    stacks[from].pop();
+    bestMoves.push_back({from + 1, to + 1});
+    move(depth - 1, free, to);
 }

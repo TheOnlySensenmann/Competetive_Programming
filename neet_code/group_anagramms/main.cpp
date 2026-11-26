@@ -4,12 +4,17 @@
 #include <vector>
 #include <map>
 #include <sstream>
+#include <bitset>
+#include <unordered_map>
 
 using namespace std;
+
+static const int CHARACTERS_SIZE = 26;
 
 
 vector<string> parseInput(const string& input);
 vector<vector<std::string> > groupAnagrams(vector<string> &strs);
+void test();
 
 int main() {
     string input_string;
@@ -22,6 +27,14 @@ int main() {
         }
         cout << endl;
     }
+}
+
+
+void test() {
+    bitset<182> bitset;
+    bitset.reset();
+    bitset.flip();
+    cout << bitset.to_string() << endl;
 }
 
 vector<string> parseInput(const string& input) {
@@ -39,14 +52,21 @@ vector<string> parseInput(const string& input) {
 }
 
 vector<vector<std::string> > groupAnagrams(vector<string> &strs) {
-    map<string, vector<string> > map;
+    unordered_map<bitset<182>, vector<string> > map;
     vector<vector<string> > res;
     for (const auto & str : strs) {
-        string word = str;
-        sort(word.begin(), word.end());
-        map[word].push_back(str);
+        bitset<182> bitset;
+        for (int i = 0; i < str.length(); i++) {
+            int n = str[i] - 'a';
+            bitset.flip(n*7);
+            while (!bitset.test(n)) {
+                n++;
+                bitset.flip(n);
+            }
+        }
+        map[bitset].push_back(str);
     }
-    for (auto key : map) {
+    for (auto const& key : map) {
         res.push_back(key.second);
     }
     return res;
